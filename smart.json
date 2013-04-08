@@ -1,0 +1,11 @@
+{
+  "name": "location",
+  "description": "A reactive version of window.location",
+  "homepage": "https://github.com/tmeasday/meteor-location",
+  "author": "Tom Coleman <tom@thesnail.org>",
+  "version": "0.0.1",
+  "git": "https://github.com/tmeasday/meteor-location.git",
+  "packages": {
+    "page-js-ie-support": {}
+  }
+}
