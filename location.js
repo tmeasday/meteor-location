@@ -1,29 +1,40 @@
-var Location = function() {
-  this._locationListeners = new Deps.Dependency;
-  
-  // start it up
-  page('*', _.bind(this._locationChanged, this));
-}
+Meteor.Location = function (Deps) {
+    "use strict";
 
-Location.prototype._locationChanged = function() {
-  this._locationListeners.changed();
-}
+    var pathName,
+        queryString,
+        currentLocationDeps = new Deps.Dependency();
 
-/**************** PUBLIC API **********************/
+    page(function (route) {
+        var triggerChange = false;
+        if (pathName !== route.pathname) {
+            pathName = route.pathname;
+            triggerChange = true;
+        }
+        if (queryString !== route.querystring) {
+            queryString = route.querystring;
+            triggerChange = true;
+        }
+        if (triggerChange) {
+            currentLocationDeps.changed();
+        }
+    });
+    page();
 
-Location.prototype.href = function() {
-  Deps.depend(this._locationListeners);
-  return window.location.href;
-}
-
-Location.prototype.path = function() {
-  Deps.depend(this._locationListeners);
-  return window.location.pathname;
-}
-
-Location.prototype.setPath = function(path) {
-  page(path);
-}
-
-// "export"
-Meteor.Location = new Location;
+    return {
+        getPath: function () {
+            currentLocationDeps.depend();
+            return pathName;
+        },
+        setPath: function (path) {
+            page(path);
+        },
+        getQueryString: function () {
+            currentLocationDeps.depend();
+            return queryString;
+        },
+        setQueryString: function (query) {
+            page(pathName + '?' + query);
+        }
+    };
+}(Deps);
