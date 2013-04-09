@@ -5,14 +5,14 @@ Meteor.Location = function (Deps) {
         queryString,
         currentLocationDeps = new Deps.Dependency();
 
-    page(function (route) {
+    page(function (context) {
         var triggerChange = false;
-        if (pathName !== route.pathname) {
-            pathName = route.pathname;
+        if (pathName !== context.pathname) {
+            pathName = context.pathname;
             triggerChange = true;
         }
-        if (queryString !== route.querystring) {
-            queryString = route.querystring;
+        if (queryString !== context.querystring) {
+            queryString = context.querystring;
             triggerChange = true;
         }
         if (triggerChange) {
